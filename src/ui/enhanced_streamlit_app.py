@@ -946,48 +946,59 @@ def main():
         page_title="DocFitLabs for AI - Unified Console",
         page_icon="📄",
         layout="wide",
-        initial_sidebar_state="expanded"
+        initial_sidebar_state="collapsed"  # Collapse sidebar by default
     )
     
     # Add Google Analytics
     add_google_analytics()
     
-    # Header
-    st.title("📄 DocFitLabs for AI - Unified Console")
-    st.markdown(f"**{__description__}**")
-    st.markdown(f"*Version {__version__} by {__author__}*")
+    # Create a navbar at the top
+    st.markdown("""
+    <div style='background-color: #f0f2f6; padding: 8px 0; margin-bottom: 10px; border-radius: 5px;'>
+        <div style='display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;'>
+            <div style='display: flex; align-items: center;'>
+                <h4 style='margin: 0; color: #1f77b4;'>📄 DocFitLabs for AI</h4>
+                <span style='margin-left: 8px; color: #666; font-size: 11px;'>Document Assessment Platform</span>
+            </div>
+            <div style='display: flex; gap: 12px;'>
+                <a href='https://github.com/docfitlabs/docfit4ai' style='color: #666; text-decoration: none; font-size: 13px;'>🔗 GitHub</a>
+                <a href='https://github.com/docfitlabs/docfit4ai#readme' style='color: #666; text-decoration: none; font-size: 13px;'>📖 Docs</a>
+                <a href='https://github.com/docfitlabs/docfit4ai' style='color: #666; text-decoration: none; font-size: 13px;'>⭐ Star</a>
+                <a href='https://github.com/docfitlabs/docfit4ai/issues' style='color: #666; text-decoration: none; font-size: 13px;'>🐛 Issues</a>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # GitHub link and educational disclaimer
-    col1, col2, col3 = st.columns([2, 1, 1])
+    # Main heading - Choose Your Assessment Tool (compact)
+    st.markdown("""
+    <div style='text-align: center; margin: 10px 0 15px 0;'>
+        <h1 style='color: #2c3e50; margin-bottom: 5px; font-size: 2em;'>Choose Your Assessment Tool</h1>
+        <p style='color: #7f8c8d; font-size: 16px; margin: 0;'>Select the assessment type that matches your needs</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    with col1:
-        st.markdown("🔗 [View on GitHub](https://github.com/docfitlabs/docfit4ai) | 📖 [Documentation](https://github.com/docfitlabs/docfit4ai#readme)")
+    # Small disclaimer (inline)
+    st.markdown("⚠️ *Results should be verified independently*")
     
-    with col2:
-        st.markdown("⭐ [Star on GitHub](https://github.com/docfitlabs/docfit4ai)")
+    # Make tabs more prominent with custom styling
+    st.markdown("""
+    <div style='margin: 15px 0; padding: 10px; background-color: #f8f9fa; border-radius: 8px; border: 2px solid #e9ecef;'>
+        <p style='text-align: center; margin: 0; color: #495057; font-weight: bold;'>👇 Click on a tab below to start your assessment</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    with col3:
-        st.markdown("🐛 [Report Issues](https://github.com/docfitlabs/docfit4ai/issues)")
-    
-    # Disclaimer
-    st.warning("""
-    ⚠️ **Disclaimer**: Results should be verified independently and are not intended for production use without proper validation. 
-    Always consult with appropriate experts for critical decisions.
-    """)
-    
-    st.markdown("---")
-    
-    # Sidebar with platform info
+    # Optional sidebar with additional info (collapsed by default)
     with st.sidebar:
-        st.header("🔧 Platform Information")
+        st.header("ℹ️ Platform Info")
         st.markdown("""
-        **DocFitLabs for AI** provides three specialized assessment tools:
+        **Three Specialized Tools:**
         
-        - **🎯 AI Readiness** - Optimize documents for RAG systems
-        - **🔒 Security Analysis** - Detect PII and security risks  
-        - **🎭 IP Protection** - Measure obfuscation effectiveness
+        🎯 **AI Readiness** - Optimize documents for RAG systems
         
-        Each tool is designed for specific user personas and use cases.
+        🔒 **Security Analysis** - Detect PII and security risks  
+        
+        🎭 **IP Protection** - Measure obfuscation effectiveness
         """)
         
         st.markdown("---")
@@ -999,30 +1010,20 @@ obfuscate4ai measure --input-file doc.txt
         """)
         
         st.markdown("---")
-        st.markdown("**🔗 Links:**")
+        st.markdown("**Quick Links:**")
         st.markdown("""
         - [📖 Documentation](https://github.com/docfitlabs/docfit4ai#readme)
         - [🐛 Report Issues](https://github.com/docfitlabs/docfit4ai/issues)
         - [💬 Discussions](https://github.com/docfitlabs/docfit4ai/discussions)
         - [⭐ Star Project](https://github.com/docfitlabs/docfit4ai)
         """)
-        
-        st.markdown("---")
-        st.markdown("**⚠️ Important Notice:**")
-        st.info("""
-        **Please use with caution:**
-        - Always verify results independently
-        - Not intended for production use without proper validation
-        - Results may not be 100% accurate
-        - Consult appropriate experts for critical decisions
-        """)
     
-    # Main tabbed interface
+    # Main tabbed interface - Make it more prominent
     tab1, tab2, tab3, tab4 = st.tabs([
-        "🎯 AI Readiness", 
-        "🔒 Security Analysis", 
-        "🎭 IP Protection",
-        "📝 Feedback & Usage"
+        "🎯 AI Readiness Assessment", 
+        "🔒 Security & PII Analysis", 
+        "🎭 IP Protection Analysis",
+        "📝 Feedback & Support"
     ])
     
     with tab1:
@@ -1037,43 +1038,13 @@ obfuscate4ai measure --input-file doc.txt
     with tab4:
         render_feedback_tab()
     
-    # Footer with resources information
-    st.markdown("---")
-    st.markdown("### 📚 Resources")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        **📚 Resources:**
-        - [AI Readiness Best Practices](https://github.com/docfitlabs/docfit4ai#ai-readiness)
-        - [Security Analysis Guide](https://github.com/docfitlabs/docfit4ai#security-analysis)
-        - [IP Protection Strategies](https://github.com/docfitlabs/docfit4ai#ip-protection)
-        """)
-    
-    with col2:
-        st.markdown("""
-        **🔧 Development:**
-        - [Contributing Guide](https://github.com/docfitlabs/docfit4ai/blob/main/CONTRIBUTING.md)
-        - [Code of Conduct](https://github.com/docfitlabs/docfit4ai/blob/main/CODE_OF_CONDUCT.md)
-        - [Issue Templates](https://github.com/docfitlabs/docfit4ai/issues)
-        """)
-    
-    with col3:
-        st.markdown("""
-        **📄 License & Legal:**
-        - [MIT License](https://github.com/docfitlabs/docfit4ai/blob/main/LICENSE)
-        - [Privacy Policy](https://github.com/docfitlabs/docfit4ai#privacy)
-        - [Terms of Use](https://github.com/docfitlabs/docfit4ai#terms)
-        """)
-    
-    # Final disclaimer
+    # Minimal footer
     st.markdown("---")
     st.markdown("""
-    <div style='text-align: center; color: #666; font-size: 0.9em;'>
-        <p><strong>⚠️ Disclaimer:</strong> Results should be verified independently and are not intended for production use without proper validation. 
-        Always consult with appropriate experts for critical decisions.</p>
-        <p>Made with ❤️ by the DocFitLabs Team | <a href="mailto:docfit4ai@outlook.com">Contact Us</a> | <a href="https://github.com/docfitlabs/docfit4ai">View on GitHub</a></p>
+    <div style='text-align: center; color: #666; font-size: 0.9em; margin-top: 30px;'>
+        <p><strong>DocFitLabs for AI</strong> - Made with ❤️ | 
+        <a href="mailto:docfit4ai@outlook.com">Contact</a> | 
+        <a href="https://github.com/docfitlabs/docfit4ai">GitHub</a></p>
     </div>
     """, unsafe_allow_html=True)
 
