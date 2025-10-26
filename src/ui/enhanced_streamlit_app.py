@@ -515,6 +515,248 @@ def render_obfuscation_tab():
     ⚠️ **Disclaimer**: IP protection strategies should be developed with legal and technical experts. 
     Results are not legal advice.
     """)
+    
+    # File upload section
+    st.subheader("📄 Upload Document for IP Protection Analysis")
+    
+    uploaded_file = st.file_uploader(
+        "Choose a document to analyze",
+        type=['txt', 'md', 'rst', 'pdf', 'html', 'htm'],
+        help="Upload a document to assess its IP protection and obfuscation effectiveness"
+    )
+    
+    if uploaded_file is not None:
+        try:
+            # Parse the uploaded file
+            document = app._parse_uploaded_file(uploaded_file)
+            
+            # Analysis options
+            st.subheader("🔧 Analysis Options")
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                include_complexity = st.checkbox("Complexity Analysis", value=True, help="Analyze technical complexity and obfuscation level")
+                include_terminology = st.checkbox("Technical Terminology", value=True, help="Assess use of technical jargon and specialized terms")
+            
+            with col2:
+                include_llm_analysis = st.checkbox("LLM Suitability Analysis", value=True, help="Determine if document is suitable for private vs public LLMs")
+                include_recommendations = st.checkbox("Protection Recommendations", value=True, help="Generate IP protection improvement suggestions")
+            
+            # Run analysis
+            if st.button("🔍 Analyze IP Protection", type="primary"):
+                with st.spinner("Analyzing document for IP protection effectiveness..."):
+                    # Generate obfuscation score
+                    obfuscation_score = app.scoring_engine.calculate_score(
+                        document, 
+                        ScoreType.OBFUSCATION,
+                        app.config
+                    )
+                    
+                    # Display results
+                    st.subheader("📊 IP Protection Assessment Results")
+                    
+                    # Overall score with visual indicator
+                    col1, col2, col3 = st.columns([1, 2, 1])
+                    with col2:
+                        score_color = "red" if obfuscation_score.overall_score < 30 else "orange" if obfuscation_score.overall_score < 60 else "green"
+                        st.metric(
+                            "Overall IP Protection Score",
+                            f"{obfuscation_score.overall_score:.1f}/100",
+                            delta=f"{app.config.get_score_category('obfuscation', obfuscation_score.overall_score).title()} Risk"
+                        )
+                        
+                        # Visual progress bar
+                        st.progress(obfuscation_score.overall_score / 100)
+                        
+                        # Risk level indicator
+                        risk_level = app.config.get_score_category('obfuscation', obfuscation_score.overall_score)
+                        if risk_level == 'low':
+                            st.success("✅ Low Risk - Good IP Protection")
+                        elif risk_level == 'medium':
+                            st.warning("⚠️ Medium Risk - Consider Additional Protection")
+                        else:
+                            st.error("🚨 High Risk - Immediate Protection Needed")
+                    
+                    # Component scores
+                    if include_complexity or include_terminology:
+                        st.subheader("📈 Protection Component Analysis")
+                        component_df = pd.DataFrame([
+                            {"Component": comp.replace('_', ' ').title(), "Score": score}
+                            for comp, score in obfuscation_score.component_scores.items()
+                        ])
+                        
+                        fig = px.bar(
+                            component_df,
+                            x="Component",
+                            y="Score",
+                            title="IP Protection Component Scores",
+                            color="Score",
+                            color_continuous_scale="RdYlGn_r"
+                        )
+                        fig.update_layout(height=400)
+                        st.plotly_chart(fig, use_container_width=True)
+                    
+                    # LLM Suitability Analysis
+                    if include_llm_analysis:
+                        st.subheader("🤖 LLM Suitability Analysis")
+                        
+                        # Simulate LLM suitability analysis
+                        llm_suitability = {
+                            'private_llm_risk': 'Low' if obfuscation_score.overall_score > 70 else 'Medium' if obfuscation_score.overall_score > 40 else 'High',
+                            'public_llm_risk': 'High' if obfuscation_score.overall_score < 60 else 'Medium' if obfuscation_score.overall_score < 80 else 'Low',
+                            'recommended_usage': 'Private LLM Only' if obfuscation_score.overall_score < 60 else 'Both Private and Public' if obfuscation_score.overall_score > 80 else 'Private LLM Preferred'
+                        }
+                        
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            st.metric("Private LLM Risk", llm_suitability['private_llm_risk'])
+                        with col2:
+                            st.metric("Public LLM Risk", llm_suitability['public_llm_risk'])
+                        with col3:
+                            st.metric("Recommended Usage", llm_suitability['recommended_usage'])
+                        
+                        # LLM risk visualization
+                        llm_df = pd.DataFrame([
+                            {"LLM Type": "Private LLM", "Risk Level": llm_suitability['private_llm_risk'], "Score": 90 if llm_suitability['private_llm_risk'] == 'Low' else 60 if llm_suitability['private_llm_risk'] == 'Medium' else 30},
+                            {"LLM Type": "Public LLM", "Risk Level": llm_suitability['public_llm_risk'], "Score": 30 if llm_suitability['public_llm_risk'] == 'High' else 60 if llm_suitability['public_llm_risk'] == 'Medium' else 90}
+                        ])
+                        
+                        fig = px.bar(
+                            llm_df,
+                            x="LLM Type",
+                            y="Score",
+                            color="Risk Level",
+                            title="LLM Suitability Risk Assessment",
+                            color_discrete_map={
+                                'Low': '#32CD32',
+                                'Medium': '#FFD700',
+                                'High': '#FF0000'
+                            }
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
+                    
+                    # Recommendations
+                    if include_recommendations and obfuscation_score.recommendations:
+                        st.subheader("🔧 IP Protection Recommendations")
+                        for i, rec in enumerate(obfuscation_score.recommendations, 1):
+                            st.write(f"**{i}.** {rec}")
+                    
+                    # Export options
+                    st.subheader("💾 Export IP Protection Report")
+                    export_format = st.selectbox("Export Format", ["JSON", "Text", "YAML"])
+                    
+                    if export_format == "JSON":
+                        export_data = {
+                            "document": {
+                                "filename": document.filename,
+                                "file_type": document.file_type.value,
+                                "file_size": document.file_size,
+                                "word_count": document.word_count
+                            },
+                            "ip_protection_assessment": {
+                                "overall_score": obfuscation_score.overall_score,
+                                "category": app.config.get_score_category('obfuscation', obfuscation_score.overall_score),
+                                "component_scores": obfuscation_score.component_scores,
+                                "recommendations": obfuscation_score.recommendations,
+                                "llm_suitability": llm_suitability if include_llm_analysis else None
+                            }
+                        }
+                        
+                        json_str = json.dumps(export_data, indent=2)
+                        st.download_button(
+                            "📥 Download IP Protection Report",
+                            json_str,
+                            file_name=f"ip_protection_report_{document.filename}.json",
+                            mime="application/json"
+                        )
+                    
+                    elif export_format == "Text":
+                        text_report = f"""
+IP Protection Assessment Report
+==============================
+
+Document: {document.filename}
+File Type: {document.file_type.value}
+File Size: {document.file_size} bytes
+Word Count: {document.word_count}
+
+Overall IP Protection Score: {obfuscation_score.overall_score:.1f}/100
+Risk Category: {app.config.get_score_category('obfuscation', obfuscation_score.overall_score).title()}
+
+Component Scores:
+{chr(10).join([f"- {comp.replace('_', ' ').title()}: {score:.1f}" for comp, score in obfuscation_score.component_scores.items()])}
+
+Recommendations:
+{chr(10).join([f"{i}. {rec}" for i, rec in enumerate(obfuscation_score.recommendations, 1)])}
+
+LLM Suitability Analysis:
+- Private LLM Risk: {llm_suitability['private_llm_risk'] if include_llm_analysis else 'N/A'}
+- Public LLM Risk: {llm_suitability['public_llm_risk'] if include_llm_analysis else 'N/A'}
+- Recommended Usage: {llm_suitability['recommended_usage'] if include_llm_analysis else 'N/A'}
+                        """
+                        
+                        st.download_button(
+                            "📥 Download IP Protection Report",
+                            text_report,
+                            file_name=f"ip_protection_report_{document.filename}.txt",
+                            mime="text/plain"
+                        )
+                    
+                    elif export_format == "YAML":
+                        yaml_data = {
+                            "document": {
+                                "filename": document.filename,
+                                "file_type": document.file_type.value,
+                                "file_size": document.file_size,
+                                "word_count": document.word_count
+                            },
+                            "ip_protection_assessment": {
+                                "overall_score": obfuscation_score.overall_score,
+                                "category": app.config.get_score_category('obfuscation', obfuscation_score.overall_score),
+                                "component_scores": obfuscation_score.component_scores,
+                                "recommendations": obfuscation_score.recommendations,
+                                "llm_suitability": llm_suitability if include_llm_analysis else None
+                            }
+                        }
+                        
+                        yaml_str = yaml.dump(yaml_data, default_flow_style=False)
+                        st.download_button(
+                            "📥 Download IP Protection Report",
+                            yaml_str,
+                            file_name=f"ip_protection_report_{document.filename}.yaml",
+                            mime="application/x-yaml"
+                        )
+        
+        except Exception as e:
+            st.error(f"❌ Error processing document: {str(e)}")
+    
+    else:
+        # Show example when no file is uploaded
+        st.info("👆 Please upload a document to begin IP protection analysis")
+        
+        # Show example use cases
+        st.subheader("💡 Example Use Cases")
+        st.markdown("""
+        **IP Protection Analysis helps you:**
+        - Assess document obfuscation effectiveness
+        - Determine LLM suitability (private vs public)
+        - Identify areas needing additional protection
+        - Generate protection recommendations
+        - Evaluate technical complexity levels
+        """)
+        
+        # Show supported file types
+        st.subheader("📁 Supported File Types")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.markdown("• TXT files")
+            st.markdown("• Markdown files")
+        with col2:
+            st.markdown("• PDF documents")
+            st.markdown("• HTML files")
+        with col3:
+            st.markdown("• RST files")
+            st.markdown("• All text-based formats")
 
 
 def render_feedback_tab():
