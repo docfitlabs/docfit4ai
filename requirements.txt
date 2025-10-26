@@ -1,0 +1,47 @@
+# DocFitLabs for AI - Requirements
+# Core dependencies for document assessment tools
+
+# Core NLP and text processing
+nltk>=3.8.1
+spacy>=3.4.0
+textstat>=0.7.3
+
+# Document parsing
+PyPDF2>=3.0.1
+pypdf>=3.0.0
+beautifulsoup4>=4.11.1
+lxml>=4.9.1
+
+# Data processing and analysis
+pandas>=1.5.0
+numpy>=1.21.0
+
+# Web interface
+streamlit>=1.25.0
+plotly>=5.15.0
+
+# CLI and utilities
+click>=8.1.0
+rich>=13.0.0
+colorama>=0.4.6
+
+# Configuration and data handling
+pydantic>=1.10.0
+python-dotenv>=1.0.0
+PyYAML>=6.0
+
+# Testing
+pytest>=7.2.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+
+# Development tools
+black>=22.12.0
+flake8>=6.0.0
+mypy>=1.0.0
+
+# Optional: Advanced NLP (for future LLM integration)
+# transformers>=4.25.0
+# torch>=1.13.0
+# openai>=0.27.0
+# anthropic>=0.3.0

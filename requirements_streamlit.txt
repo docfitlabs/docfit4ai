@@ -1,0 +1,32 @@
+# DocFitLabs for AI - Streamlit Cloud Requirements
+# Optimized for Streamlit Cloud deployment
+
+# Core dependencies
+streamlit>=1.25.0
+pandas>=1.5.0
+numpy>=1.21.0
+plotly>=5.15.0
+
+# Document parsing
+PyPDF2>=3.0.1
+pypdf>=3.0.0
+beautifulsoup4>=4.11.1
+lxml>=4.9.1
+
+# NLP and text processing
+nltk>=3.8.1
+spacy>=3.4.0
+textstat>=0.7.3
+
+# Data handling
+pydantic>=1.10.0
+python-dotenv>=1.0.0
+
+# YAML support for PII config
+PyYAML>=6.0
+
+# Optional: Advanced features (uncomment if needed)
+# transformers>=4.25.0
+# torch>=1.13.0
+# openai>=0.27.0
+# anthropic>=0.3.0

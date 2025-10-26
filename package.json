@@ -1,0 +1,45 @@
+{
+  "name": "docfit4ai",
+  "version": "1.0.0",
+  "description": "Unified Document Assessment Platform for AI Readiness, Security, and IP Protection",
+  "main": "index.js",
+  "bin": {
+    "ready4ai": "./bin/ready4ai.js",
+    "security4ai": "./bin/security4ai.js",
+    "obfuscate4ai": "./bin/obfuscate4ai.js",
+    "docfit4ai-ui": "./bin/docfit4ai-ui.js"
+  },
+  "scripts": {
+    "start": "node bin/docfit4ai-ui.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ai",
+    "document",
+    "assessment",
+    "readiness",
+    "security",
+    "obfuscation",
+    "pii",
+    "compliance",
+    "rag",
+    "llm"
+  ],
+  "author": "DocFitLabs Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/docfitlabs/docfit4ai.git"
+  },
+  "homepage": "https://github.com/docfitlabs/docfit4ai#readme",
+  "bugs": {
+    "url": "https://github.com/docfitlabs/docfit4ai/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "python-shell": "^5.0.0"
+  },
+  "preferGlobal": true
+}

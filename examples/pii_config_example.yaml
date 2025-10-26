@@ -1,0 +1,87 @@
+# PII Configuration Example for Security4AI
+# This file demonstrates how to configure PII detection patterns and risk levels
+
+patterns:
+  # Name patterns
+  names:
+    - '\b[A-Z][a-z]+ [A-Z][a-z]+\b'  # Full names like "John Smith"
+    - '\b[A-Z][a-z]+ [A-Z]\. [A-Z][a-z]+\b'  # Names with middle initial like "John A. Smith"
+    - '\b[A-Z][a-z]+ [A-Z][a-z]+ [A-Z][a-z]+\b'  # Three-part names like "John A Smith"
+  
+  # Email patterns
+  emails:
+    - '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'  # Standard email format
+  
+  # Phone number patterns
+  phones:
+    - '\b\d{3}-\d{3}-\d{4}\b'  # 123-456-7890
+    - '\(\d{3}\) \d{3}-\d{4}'  # (123) 456-7890
+    - '\b\d{3}\.\d{3}\.\d{4}\b'  # 123.456.7890
+    - '\b\d{10}\b'  # 1234567890
+  
+  # Social Security Number patterns
+  ssn:
+    - '\b\d{3}-\d{2}-\d{4}\b'  # 123-45-6789
+    - '\b\d{9}\b'  # 123456789
+  
+  # Credit card patterns
+  credit_cards:
+    - '\b\d{4} \d{4} \d{4} \d{4}\b'  # 1234 5678 9012 3456
+    - '\b\d{4}-\d{4}-\d{4}-\d{4}\b'  # 1234-5678-9012-3456
+    - '\b\d{16}\b'  # 1234567890123456
+  
+  # Address patterns
+  addresses:
+    - '\b\d+\s+[A-Za-z\s]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr)\b'
+    - '\b[A-Za-z\s]+,\s*[A-Z]{2}\s+\d{5}(?:-\d{4})?\b'  # City, State ZIP
+  
+  # Additional sensitive patterns
+  financial:
+    - '\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?\b'  # Money amounts
+    - '\b(?:salary|wage|income|revenue|profit|loss)\b'
+    - '\b(?:bank|account|routing|swift)\b'
+  
+  medical:
+    - '\b(?:patient|diagnosis|treatment|medication|prescription)\b'
+    - '\b(?:medical|health|hospital|clinic|doctor|physician)\b'
+    - '\b(?:condition|symptom|disease|illness|disorder)\b'
+
+# Risk levels for each PII type
+risk_levels:
+  names: medium
+  emails: high
+  phones: high
+  ssn: critical
+  credit_cards: critical
+  addresses: medium
+  financial: high
+  medical: critical
+
+# Compliance framework settings
+compliance_frameworks:
+  gdpr: true      # General Data Protection Regulation (EU)
+  ccpa: true      # California Consumer Privacy Act (US)
+  hipaa: false    # Health Insurance Portability and Accountability Act (US)
+  sox: false      # Sarbanes-Oxley Act (US)
+  pci_dss: false  # Payment Card Industry Data Security Standard
+
+# Additional configuration options
+settings:
+  # Maximum number of matches to report per PII type
+  max_matches_per_type: 10
+  
+  # Whether to include partial matches in results
+  include_partial_matches: false
+  
+  # Minimum confidence threshold for PII detection
+  confidence_threshold: 0.8
+  
+  # Whether to mask detected PII in output
+  mask_detected_pii: false
+  
+  # Custom risk scoring weights
+  risk_weights:
+    critical: 4
+    high: 3
+    medium: 2
+    low: 1
