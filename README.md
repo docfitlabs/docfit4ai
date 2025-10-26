@@ -5,10 +5,17 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.25+-red.svg)](https://streamlit.io/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit%20Cloud-green.svg)](https://docfit4ai-pky7c2plckscap9eesfkba.streamlit.app/)
 
 **Unified Document Assessment Platform**
 
 DocFitLabs for AI is a comprehensive suite of tools for assessing document readiness, security, and obfuscation for AI processing. Built with pure NLP techniques, it provides fast, reliable assessments without LLM dependencies.
+
+## 🌐 Live Demo
+
+**[🚀 Try DocFitLabs for AI Now](https://docfit4ai-pky7c2plckscap9eesfkba.streamlit.app/)**
+
+Experience the full platform with our interactive web application. Upload documents, run assessments, and explore all features in real-time.
 
 ## 🎯 Features
 
@@ -391,6 +398,12 @@ python src/cli/obfuscate4ai_enhanced.py measure --input-file test_documents/tech
 - **Reliable**: No network dependencies or rate limits
 
 ## 🚀 Deployment
+
+### Streamlit Cloud (Live)
+
+**🌐 [Try the Live Demo](https://docfit4ai-pky7c2plckscap9eesfkba.streamlit.app/)**
+
+The app is already deployed and ready to use! Simply visit the link above to start assessing your documents.
 
 ### Docker Deployment
 
